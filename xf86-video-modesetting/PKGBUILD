@@ -1,28 +1,30 @@
 # $Id$
-#Maintainer: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Andreas Radke <andyrtr@archlinux.org>
+# Contributor: Gerardo Exequiel Pozzi <vmlinuz386@yahoo.com.ar>
 
-pkgname=xf86-video-fbdev
-pkgver=0.4.4
+pkgname=xf86-video-modesetting
+pkgver=0.8.0
 pkgrel=1
-pkgdesc="X.org framebuffer video driver"
+pkgdesc="X.org generic modesetting video driver"
 arch=('any')
-license=('custom')
 url="http://xorg.freedesktop.org/"
-depends=('glibc')
+license=('custom')
+depends=('libdrm>=2.4.37' 'systemd')
 makedepends=('xorg-server-devel' 'X-ABI-VIDEODRV_VERSION=14' 'resourceproto' 'scrnsaverproto')
 conflicts=('xorg-server<1.14.0' 'X-ABI-VIDEODRV_VERSION<14' 'X-ABI-VIDEODRV_VERSION>=15')
 groups=('xorg-drivers' 'xorg')
+groups=('xorg-drivers' 'xorg')
 source=(${url}/releases/individual/driver/${pkgname}-${pkgver}.tar.bz2)
-sha256sums=('9dd4b326498223abbfdf786089a46ea3db4fa6bbd341308eb48a9e00bc3fd51b')
+sha256sums=('13dc349e9aa50987ab2479d27d6879cda2c1f9ad8c8d3a1422a2f53c36f047f8')
 
 build() {
-  cd ${pkgname}-${pkgver}
+  cd "${srcdir}/${pkgname}-${pkgver}"
   ./configure --prefix=/usr
   make
 }
 
 package() {
-  cd ${pkgname}-${pkgver}
+  cd "${srcdir}/${pkgname}-${pkgver}"
   make DESTDIR="${pkgdir}" install
   install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
